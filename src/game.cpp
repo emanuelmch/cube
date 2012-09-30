@@ -69,6 +69,7 @@ bool Bill::Game::init() {
 
 void Bill::Game::game_loop() {
 	bool redraw = true;
+	int redrawCount = 0;
 
 	bouncer->x = SCREEN_WIDTH / 2;
 	bouncer->y = SCREEN_HEIGHT / 2;
@@ -81,7 +82,7 @@ void Bill::Game::game_loop() {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
-	while (true) {
+	while (redrawCount < 50) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
@@ -119,6 +120,8 @@ void Bill::Game::game_loop() {
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 			bouncer->draw();
 			al_flip_display();
+
+			redrawCount++;
 		}
 	}
 }

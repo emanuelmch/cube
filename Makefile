@@ -24,6 +24,8 @@ all: debug
 gdb: debug
 	gdb ./debug
 
+valgrind: debug
+	valgrind --log-file=val.log ./debug
 run: debug
 	./debug
 
