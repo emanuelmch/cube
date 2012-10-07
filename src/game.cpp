@@ -11,8 +11,6 @@ static const int FPS_MAX = 60;
 static const int SCREEN_WIDTH = 800;
 static const int SCREEN_HEIGHT = 600;
 
-static const int BOUNCER_SIZE = 64;
-
 static inline void show_error(ALLEGRO_DISPLAY *display, const char *error) {
 	if (display == NULL) {
 		std::cerr << error << std::endl;
@@ -22,12 +20,14 @@ static inline void show_error(ALLEGRO_DISPLAY *display, const char *error) {
 	}
 }
 
-bool Bill::Game::init() {
-	if (!al_init()) {
-		show_error(display, "Failed to initialize Allegro!");
-		return false;
-	}
+Bill::Game::Game() {
+	display = NULL;
+	event_queue = NULL;
 
+	al_init();
+}
+
+bool Bill::Game::init() {
 	al_set_new_display_flags(ALLEGRO_OPENGL);
 
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -57,32 +57,21 @@ bool Bill::Game::init() {
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
-	bouncer = new Sprite(BOUNCER_SIZE, BOUNCER_SIZE);
-	bouncer->paint();
-	if (!bouncer->bitmap) {
-		show_error(display, "Failed to create bouncer!");
+	if (!sub_init())
 		return false;
-	}
 
 	return true;
 }
 
 void Bill::Game::game_loop() {
-	bool redraw = true;
-	int redrawCount = 0;
-
-	bouncer->x = SCREEN_WIDTH / 2;
-	bouncer->y = SCREEN_HEIGHT / 2;
-
-	int bouncer_dx = -16;
-	int bouncer_dy = -16;
+	sub_loop_init();
 
 	al_start_timer(timer);
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
-	while (redrawCount < 50) {
+	while (true) {
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
@@ -93,35 +82,15 @@ void Bill::Game::game_loop() {
 			if (ev.keyboard.keycode == ALLEGRO_KEY_ESCAPE)
 		 		 return;
 			break;
-		case ALLEGRO_EVENT_TIMER:
-			int bouncer_x = bouncer->x + bouncer_dx;
-			int bouncer_y = bouncer->y + bouncer_dy;
-
-			if (bouncer_x <= 0 || (bouncer_x+BOUNCER_SIZE) >= SCREEN_WIDTH) {
-				bouncer_dx = -bouncer_dx;
-				bouncer_x += bouncer_dx;
-			}
-			
-			if (bouncer_y <= 0 || (bouncer_y+BOUNCER_SIZE) >= SCREEN_HEIGHT) {
-				bouncer_dy = -bouncer_dy;
-				bouncer_y += bouncer_dy;
-			}
-
-			bouncer->x = bouncer_x;
-			bouncer->y = bouncer_y;
-
-			redraw = true;
-			break;
 		}
 
+		bool redraw = sub_loop_process(ev);
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
 
 			al_clear_to_color(al_map_rgb(0, 0, 0));
-			bouncer->draw();
+			sub_loop_redraw();
 			al_flip_display();
-
-			redrawCount++;
 		}
 	}
 }
@@ -140,11 +109,6 @@ void Bill::Game::shutdown() {
 	if (timer) {
 		al_destroy_timer(timer);
 		timer = NULL;
-	}
-
-	if (bouncer) {
-		delete bouncer;
-		bouncer = NULL;
 	}
 }
 
