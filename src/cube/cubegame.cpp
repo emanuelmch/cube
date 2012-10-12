@@ -77,6 +77,9 @@ void Bill::Cube::CubeGame::process_menu() {
 	case 6: // Shuffle
 		this->cube.shuffle();
 		break;
+	case 7: // Clear
+		this->cube.clear();
+		break;
 	}
 }
 

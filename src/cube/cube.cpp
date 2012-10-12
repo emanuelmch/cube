@@ -3,14 +3,7 @@
 #include <iostream>
 
 Bill::Cube::Cube::Cube() {
-	for (int i = 0; i < 9; i++) {
-		up[i] = 0;
-		left[i] = 1;
-		front[i] = 2;
-		right[i] = 3;
-		back[i] = 4;
-		down[i] = 5;
-	}
+	this->clear();
 }
 
 Bill::Cube::Cube::~Cube() {}
@@ -126,6 +119,17 @@ static void rotateSides(bool clockwise, int *src, int *front, int *left, int *ba
 				right[i] = temp;
 			}
 		}
+	}
+}
+
+void Bill::Cube::Cube::clear() {
+	for (int i = 0; i < 9; i++) {
+		up[i] = 0;
+		left[i] = 1;
+		front[i] = 2;
+		right[i] = 3;
+		back[i] = 4;
+		down[i] = 5;
 	}
 }
 

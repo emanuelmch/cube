@@ -14,6 +14,7 @@ namespace Cube {
 
 		int * get(Face face);
 
+		void clear();
 		void rotate(Rotate *rotate); 
 		void shuffle();
 
