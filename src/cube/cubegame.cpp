@@ -62,10 +62,22 @@ bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
 				redraw = true;
 			}
 			break;
+		case ALLEGRO_KEY_ENTER:
+			process_menu();
+			redraw = true;
+			break;
 		}
 	}
 
 	return redraw;
+}
+
+void Bill::Cube::CubeGame::process_menu() {
+	switch (menu) {
+	case 6: // Shuffle
+		this->cube.shuffle();
+		break;
+	}
 }
 
 static inline void draww(Bill::Sprite *block, int x, int y) {
