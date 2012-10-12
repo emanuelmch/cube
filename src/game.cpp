@@ -1,5 +1,6 @@
 #include "game.h"
 
+#include <allegro5/allegro_image.h>
 #include <allegro5/allegro_native_dialog.h>
 
 #include <iostream>
@@ -30,6 +31,9 @@ Bill::Game::Game() {
 bool Bill::Game::init() {
 	al_set_new_display_flags(ALLEGRO_OPENGL);
 
+	al_init_image_addon();
+	al_init_font_addon();
+
 	display = al_create_display(SCREEN_WIDTH, SCREEN_HEIGHT);
 	if (!display) {
 		show_error(display, "Failed to create display!");
@@ -50,6 +54,12 @@ bool Bill::Game::init() {
 	event_queue = al_create_event_queue();
 	if (!event_queue) {
 		show_error(display, "Failed to create event queue!");
+		return false;
+	}
+
+	font = al_load_font("data/bmpfont.tga", 0, 0);
+	if (!font) {
+		show_error(display, "Failed to load font file!");
 		return false;
 	}
 
@@ -109,6 +119,11 @@ void Bill::Game::shutdown() {
 	if (timer) {
 		al_destroy_timer(timer);
 		timer = NULL;
+	}
+
+	if (font) {
+		al_destroy_font(font);
+		font = NULL;
 	}
 }
 

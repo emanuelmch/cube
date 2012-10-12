@@ -29,8 +29,6 @@ Bill::Cube::CubeGame::CubeGame() : Game() {
 		faces[i]->color = getFaceColor((Face)i);
 		faces[i]->paint();
 	}
-
-	this->cube.shuffle();
 }
 
 Bill::Cube::CubeGame::~CubeGame() {
@@ -48,10 +46,13 @@ void Bill::Cube::CubeGame::sub_loop_init() {
 
 bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
 	ev = ev;
-	if (drawn)
-		return false;
 
-	return true;
+	if (!drawn) {
+		drawn = true;
+		return true;
+	}
+
+	return false;
 }
 
 static inline void draww(Bill::Sprite *block, int x, int y) {
@@ -86,5 +87,15 @@ void Bill::Cube::CubeGame::sub_loop_redraw() {
 	drawme(faces, cube.get(Face::BACK), 335, 370, 405, 115, 150, 185);
 	// draw down
 	drawme(faces, cube.get(Face::DOWN), 115, 150, 185, 225, 260, 295);
+
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 100, ALLEGRO_ALIGN_LEFT, "Up");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 150, ALLEGRO_ALIGN_LEFT, "Left");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 200, ALLEGRO_ALIGN_LEFT, "Front");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 250, ALLEGRO_ALIGN_LEFT, "Right");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 300, ALLEGRO_ALIGN_LEFT, "Back");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 350, ALLEGRO_ALIGN_LEFT, "Down");
+
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 450, ALLEGRO_ALIGN_LEFT, "Shuffle");
+	al_draw_text(font, al_map_rgb(255,255,255), 500, 500, ALLEGRO_ALIGN_LEFT, "Clear");
 }
 

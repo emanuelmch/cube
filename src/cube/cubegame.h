@@ -18,6 +18,8 @@ namespace Cube {
 		virtual bool sub_loop_process(ALLEGRO_EVENT &ev);
 		virtual void sub_loop_redraw();
 	private:
+		const int MENU_OPTIONS = 8;
+
 		Bill::Cube::Cube cube;
 		Sprite *faces[6];
 		bool drawn = false;

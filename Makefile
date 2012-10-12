@@ -11,7 +11,7 @@ DBG_DEP_DIR := $(DBG_DIR)/deps
 
 FLAGS := -Wall -Wextra -pedantic -std=c++0x
 FLAGS_DEBUG := -march=k8 -mtune=k8 -O0 -g
-LIBS := -lallegro{,_dialog}
+LIBS := -lallegro{,_{dialog,font,image}}
 
 SRCS := $(shell find $(SRC_DIR) -type f -name \*.cpp)
 DBG_OBJS := $(patsubst $(SRC_DIR)/%.cpp, $(DBG_DIR)/%.o, $(SRCS))
