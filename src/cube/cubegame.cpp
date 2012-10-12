@@ -74,6 +74,36 @@ bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
 
 void Bill::Cube::CubeGame::process_menu() {
 	switch (menu) {
+	case 0: { // Up
+			Rotate rotate(true, Face::UP);
+			this->cube.rotate(&rotate);
+		}
+		break;
+	case 1: { // Left
+			Rotate rotate(true, Face::LEFT);
+			this->cube.rotate(&rotate);
+		}
+		break;
+	case 2: { // Front
+			Rotate rotate(true, Face::FRONT);
+			this->cube.rotate(&rotate);
+		}
+		break;
+	case 3: { // Right
+			Rotate rotate(true, Face::RIGHT);
+			this->cube.rotate(&rotate);
+		}
+		break;
+	case 4: { // Back
+			Rotate rotate(true, Face::BACK);
+			this->cube.rotate(&rotate);
+		}
+		break;
+	case 5: { // Down
+			Rotate rotate(true, Face::DOWN);
+			this->cube.rotate(&rotate);
+		}
+		break;
 	case 6: // Shuffle
 		this->cube.shuffle();
 		break;
