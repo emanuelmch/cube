@@ -22,7 +22,7 @@ namespace Cube {
 
 		Bill::Cube::Cube cube;
 		Sprite *faces[6];
-		bool drawn = false;
+		int menu = 0;
 	};
 
 }

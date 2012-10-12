@@ -45,14 +45,27 @@ void Bill::Cube::CubeGame::sub_loop_init() {
 }
 
 bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
-	ev = ev;
+	bool redraw = false;	
 
-	if (!drawn) {
-		drawn = true;
-		return true;
+	if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {
+		
+		switch (ev.keyboard.keycode) {
+		case ALLEGRO_KEY_DOWN:
+			if (menu < (MENU_OPTIONS-1)) {
+				menu++;
+				redraw = true;
+			}
+			break;
+		case ALLEGRO_KEY_UP:
+			if (menu > 0) {
+				menu--;
+				redraw = true;
+			}
+			break;
+		}
 	}
 
-	return false;
+	return redraw;
 }
 
 static inline void draww(Bill::Sprite *block, int x, int y) {
@@ -74,6 +87,11 @@ static inline void drawme(Bill::Sprite **faces, int *colors, int x1, int x2, int
 	draww(faces[colors[8]], x3, y3);
 }
 
+static void draw_text(const ALLEGRO_FONT *font, const int x, const int y, const int flags, const char *text, const bool selected) {
+	ALLEGRO_COLOR color = selected ? al_map_rgb(255,0,0) : al_map_rgb(255,255,255);
+	al_draw_text(font, color, x, y, flags, text);
+}
+
 void Bill::Cube::CubeGame::sub_loop_redraw() {
 	// draw up
 	drawme(faces, cube.get(Face::UP), 115, 150, 185, 5, 40, 75);
@@ -88,14 +106,14 @@ void Bill::Cube::CubeGame::sub_loop_redraw() {
 	// draw down
 	drawme(faces, cube.get(Face::DOWN), 115, 150, 185, 225, 260, 295);
 
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 100, ALLEGRO_ALIGN_LEFT, "Up");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 150, ALLEGRO_ALIGN_LEFT, "Left");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 200, ALLEGRO_ALIGN_LEFT, "Front");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 250, ALLEGRO_ALIGN_LEFT, "Right");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 300, ALLEGRO_ALIGN_LEFT, "Back");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 350, ALLEGRO_ALIGN_LEFT, "Down");
+	draw_text(font, 500, 100, ALLEGRO_ALIGN_LEFT, "Up", menu == 0);
+	draw_text(font, 500, 150, ALLEGRO_ALIGN_LEFT, "Left", menu == 1);
+	draw_text(font, 500, 200, ALLEGRO_ALIGN_LEFT, "Front", menu == 2);
+	draw_text(font, 500, 250, ALLEGRO_ALIGN_LEFT, "Right", menu == 3);
+	draw_text(font, 500, 300, ALLEGRO_ALIGN_LEFT, "Back", menu == 4);
+	draw_text(font, 500, 350, ALLEGRO_ALIGN_LEFT, "Down", menu == 5);
 
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 450, ALLEGRO_ALIGN_LEFT, "Shuffle");
-	al_draw_text(font, al_map_rgb(255,255,255), 500, 500, ALLEGRO_ALIGN_LEFT, "Clear");
+	draw_text(font, 500, 450, ALLEGRO_ALIGN_LEFT, "Shuffle", menu == 6);
+	draw_text(font, 500, 500, ALLEGRO_ALIGN_LEFT, "Clear", menu == 7);
 }
 

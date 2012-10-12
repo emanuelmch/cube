@@ -64,7 +64,7 @@ bool Bill::Game::init() {
 	}
 
 	al_register_event_source(event_queue, al_get_display_event_source(display));
-	al_register_event_source(event_queue, al_get_timer_event_source(timer));
+	//al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_keyboard_event_source());
 
 	if (!sub_init())
@@ -74,11 +74,14 @@ bool Bill::Game::init() {
 }
 
 void Bill::Game::game_loop() {
+	bool redraw = false;
+
 	sub_loop_init();
 
 	al_start_timer(timer);
 
 	al_clear_to_color(al_map_rgb(0, 0, 0));
+	sub_loop_redraw();
 	al_flip_display();
 
 	while (true) {
@@ -94,7 +97,12 @@ void Bill::Game::game_loop() {
 			break;
 		}
 
-		bool redraw = sub_loop_process(ev);
+		if (redraw) {
+			sub_loop_process(ev);
+		} else {
+			redraw = sub_loop_process(ev);
+		}
+
 		if (redraw && al_is_event_queue_empty(event_queue)) {
 			redraw = false;
 
