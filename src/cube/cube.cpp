@@ -28,12 +28,12 @@ int * Bill::Cube::Cube::get(Face face) {
 
 void Bill::Cube::Cube::clear() {
 	for (int i = 0; i < 9; i++) {
-		up[i] = 0;
-		left[i] = 1;
-		front[i] = 2;
-		right[i] = 3;
-		back[i] = 4;
-		down[i] = 5;
+		up[i] = Face::UP;
+		left[i] = Face::LEFT;
+		front[i] = Face::FRONT;
+		right[i] = Face::RIGHT;
+		back[i] = Face::BACK;
+		down[i] = Face::DOWN;
 	}
 }
 
