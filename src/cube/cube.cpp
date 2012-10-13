@@ -26,24 +26,8 @@ int * Bill::Cube::Cube::get(Face face) {
 	}
 }
 
-static void rotateSides(bool clockwise, int *src, int *front, int *left, int *back, int *right, int from, int to, int step) {
+static void rotateSides(bool clockwise, int *front, int *left, int *back, int *right, int from, int to, int step) {
 	if (clockwise) {
-		int dest[8];
-
-		dest[0] = src[6];
-		dest[1] = src[3];
-		dest[2] = src[0];
-
-		dest[3] = src[7];
-		dest[4] = src[4];
-		dest[5] = src[1];
-
-		dest[6] = src[8];
-		dest[7] = src[5];
-		dest[8] = src[2];
-
-		memcpy(src, dest, sizeof(int) * 8);
-
 		if (step == 0) {
 			int front6 = front[6];
 			int front7 = front[7];
@@ -74,22 +58,6 @@ static void rotateSides(bool clockwise, int *src, int *front, int *left, int *ba
 			}
 		}
 	} else {
-		int dest[8];
-
-		dest[0] = src[2];
-		dest[1] = src[5];
-		dest[2] = src[8];
-
-		dest[3] = src[1];
-		dest[4] = src[4];
-		dest[5] = src[7];
-
-		dest[6] = src[6];
-		dest[7] = src[3];
-		dest[8] = src[0];
-
-		memcpy(src, dest, sizeof(int) * 8);
-
 		if (step == 0) {
 			int front6 = front[6];
 			int front7 = front[7];
@@ -133,25 +101,63 @@ void Bill::Cube::Cube::clear() {
 	}
 }
 
+static void rotateFace(bool clockwise, int *face) {
+	int temp[8];
+
+	if (clockwise) {
+		temp[0] = face[6];
+		temp[1] = face[3];
+		temp[2] = face[0];
+
+		temp[3] = face[7];
+		temp[4] = face[4];
+		temp[5] = face[1];
+
+		temp[6] = face[8];
+		temp[7] = face[5];
+		temp[8] = face[2];
+	} else {
+		temp[0] = face[2];
+		temp[1] = face[5];
+		temp[2] = face[8];
+
+		temp[3] = face[1];
+		temp[4] = face[4];
+		temp[5] = face[7];
+
+		temp[6] = face[6];
+		temp[7] = face[3];
+		temp[8] = face[0];
+	}
+
+	memcpy(face, temp, sizeof(int) * 8);
+}
+
 void Bill::Cube::Cube::rotate(Rotate *rotate) {
 	switch (rotate->face) {
 	case UP:
-		rotateSides(rotate->clockwise, up, front, left, back, right, 0, 2, 1);
+		rotateFace(rotate->clockwise, up);
+		rotateSides(rotate->clockwise, front, left, back, right, 0, 2, 1);
 		break;
 	case LEFT:
-		rotateSides(rotate->clockwise, left, up, front, down, back, 0, 6, 3);
+		rotateFace(rotate->clockwise, left);
+		rotateSides(rotate->clockwise, up, front, down, back, 0, 6, 3);
 		break;
 	case FRONT:
-		rotateSides(rotate->clockwise, front, up, right, down, left, 0, 0, 0);
+		rotateFace(rotate->clockwise, front);
+		rotateSides(rotate->clockwise, up, right, down, left, 0, 0, 0);
 		break;
 	case RIGHT:
-		rotateSides(rotate->clockwise, right, up, back, down, front, 2, 8, 3);
+		rotateFace(rotate->clockwise, right);
+		rotateSides(rotate->clockwise, up, back, down, front, 2, 8, 3);
 		break;	
 	case BACK:
-		rotateSides(rotate->clockwise, back, up, left, down, right, 0, 0, 0);
+		rotateFace(rotate->clockwise, back);
+		rotateSides(rotate->clockwise, up, left, down, right, 0, 0, 0);
 		break;	
 	case DOWN:
-		rotateSides(rotate->clockwise, down, front, right, down, left, 6, 8, 1);
+		rotateFace(rotate->clockwise, down);
+		rotateSides(rotate->clockwise, front, right, back, left, 6, 8, 1);
 		break;	
 	}
 }
