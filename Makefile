@@ -14,8 +14,8 @@ REL_DEP_DIR := $(REL_DIR)/deps
 TST_DIR := $(BUILD_DIR)/test
 
 FLAGS := -Wall -Wextra -pedantic -std=c++0x
-FLAGS_DEBUG := -march=k8 -mtune=k8 -O0 -g
-FLAGS_RELEASE := -march=k8 -mtune=k8 -O2
+FLAGS_DEBUG := -march=corei7-avx -mtune=corei7-avx -O0 -g
+FLAGS_DEBUG := -march=corei7-avx -mtune=corei7-avx -O2
 LIBS := -lallegro{,_{dialog,font,image}}
 TEST_LIBS := -lcppunit
 
