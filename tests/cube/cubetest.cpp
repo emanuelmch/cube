@@ -8,26 +8,29 @@ using Bill::Cube::Rotate;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CubeTest);
 
-static inline void assertArrayEquals(const int *actual, const int v0, const int v1, const int v2, const int v3, const int v4, const int v5, const int v6, const int v7, const int v8) {
-	CPPUNIT_ASSERT_EQUAL(actual[0], v0);
-	CPPUNIT_ASSERT_EQUAL(actual[1], v1);
-	CPPUNIT_ASSERT_EQUAL(actual[2], v2);
-	CPPUNIT_ASSERT_EQUAL(actual[3], v3);
-	CPPUNIT_ASSERT_EQUAL(actual[4], v4);
-	CPPUNIT_ASSERT_EQUAL(actual[5], v5);
-	CPPUNIT_ASSERT_EQUAL(actual[6], v6);
-	CPPUNIT_ASSERT_EQUAL(actual[7], v7);
-	CPPUNIT_ASSERT_EQUAL(actual[8], v8);
+static inline void assertArrayEquals(const std::string msg, const int *actual, const int v0, const int v1, const int v2, const int v3, const int v4, const int v5, const int v6, const int v7, const int v8) {
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "0", v0, actual[0]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "1", v1, actual[1]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "2", v2, actual[2]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "3", v3, actual[3]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "4", v4, actual[4]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "5", v5, actual[5]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "6", v6, actual[6]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "7", v7, actual[7]);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE(msg + "8", v8, actual[8]);
 }
 
-static inline void assertArraySingleValue(const int *actual, const int face) {
-	assertArrayEquals(actual, face, face, face, face, face, face, face, face, face);
+static inline void assertArraySingleValue(const std::string msg, const int *actual, const int face) {
+	assertArrayEquals(msg, actual, face, face, face, face, face, face, face, face, face);
 }
 
 static inline void assertCubeClearValues(Bill::Cube::Cube *cube) {
 	for (int face = 0; face < Bill::Cube::FACE_COUNT; face++) {
 		int *values = cube->get((Face)face);
-		assertArraySingleValue(values, face);
+		std::string msg = "Face ";
+		msg += face;
+		msg += ":";
+		assertArraySingleValue(msg, values, face);
 	}
 }
 
@@ -62,12 +65,12 @@ void CubeTest::testRotateUp() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(up, Face::UP);
-	assertArraySingleValue(down, Face::DOWN);
-	assertArrayEquals(left, Face::FRONT, Face::FRONT, Face::FRONT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT);
-	assertArrayEquals(right, Face::BACK, Face::BACK, Face::BACK, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT);
-	assertArrayEquals(front, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT);
-	assertArrayEquals(back, Face::LEFT, Face::LEFT, Face::LEFT, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK);
+	assertArraySingleValue("Face UP:", up, Face::UP);
+	assertArraySingleValue("Face DOWN:", down, Face::DOWN);
+	assertArrayEquals("Face LEFT:", left, Face::FRONT, Face::FRONT, Face::FRONT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT);
+	assertArrayEquals("Face RIGHT:", right, Face::BACK, Face::BACK, Face::BACK, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT);
+	assertArrayEquals("Face FRONT:", front, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT);
+	assertArrayEquals("Face BACK:", back, Face::LEFT, Face::LEFT, Face::LEFT, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK);
 }
 
 void CubeTest::testRotateUpFromShuffled() {
@@ -87,12 +90,12 @@ void CubeTest::testRotateLeft() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(left, Face::LEFT);
-	assertArraySingleValue(right, Face::RIGHT);
-	assertArrayEquals(up, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP);
-	assertArrayEquals(down, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN);
-	assertArrayEquals(front, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT);
-	assertArrayEquals(back, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN);
+	assertArraySingleValue("Face LEFT:", left, Face::LEFT);
+	assertArraySingleValue("Face RIGHT:", right, Face::RIGHT);
+	assertArrayEquals("Face UP:", up, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP);
+	assertArrayEquals("Face DOWN:", down, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN);
+	assertArrayEquals("Face FRONT:", front, Face:: UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT);
+	assertArrayEquals("Face BACK:", back, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN);
 }
 
 void CubeTest::testRotateLeftFromShuffled() {
@@ -112,12 +115,12 @@ void CubeTest::testRotateFront() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(back, Face::BACK);
-	assertArraySingleValue(front, Face::FRONT);
-	assertArrayEquals(left, Face::LEFT, Face::LEFT, Face::DOWN, Face::LEFT, Face::LEFT, Face::DOWN, Face::LEFT, Face::LEFT, Face::DOWN);
-	assertArrayEquals(right, Face::UP, Face::RIGHT, Face::RIGHT, Face::UP, Face::RIGHT, Face::RIGHT, Face::UP, Face::RIGHT, Face::RIGHT);
-	assertArrayEquals(up, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::LEFT, Face::LEFT, Face::LEFT);
-	assertArrayEquals(down, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN);
+	assertArraySingleValue("Face BACK:", back, Face::BACK);
+	assertArraySingleValue("Face FRONT:", front, Face::FRONT);
+	assertArrayEquals("Face LEFT:", left, Face::LEFT, Face::LEFT, Face::DOWN, Face::LEFT, Face::LEFT, Face::DOWN, Face::LEFT, Face::LEFT, Face::DOWN);
+	assertArrayEquals("Face RIGHT:", right, Face::UP, Face::RIGHT, Face::RIGHT, Face::UP, Face::RIGHT, Face::RIGHT, Face::UP, Face::RIGHT, Face::RIGHT);
+	assertArrayEquals("Face UP:", up, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::LEFT, Face::LEFT, Face::LEFT);
+	assertArrayEquals("Face DOWN:", down, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN);
 }
 
 void CubeTest::testRotateFrontFromShuffled() {
@@ -137,12 +140,12 @@ void CubeTest::testRotateRight() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(left, Face::LEFT);
-	assertArraySingleValue(right, Face::RIGHT);
-	assertArrayEquals(up, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP);
-	assertArrayEquals(down, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN);
-	assertArrayEquals(front, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT);
-	assertArrayEquals(back, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN);
+	assertArraySingleValue("Face LEFT:", left, Face::LEFT);
+	assertArraySingleValue("Face RIGHT:", right, Face::RIGHT);
+	assertArrayEquals("Face UP:", up, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP, Face::BACK, Face::UP, Face::UP);
+	assertArrayEquals("Face DOWN:", down, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN, Face::FRONT, Face::DOWN, Face::DOWN);
+	assertArrayEquals("Face FRONT:", front, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT, Face::UP, Face::FRONT, Face::FRONT);
+	assertArrayEquals("Face BACK:", back, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN, Face::BACK, Face::BACK, Face::DOWN);
 }
 
 void CubeTest::testRotateRightFromShuffled() {
@@ -163,12 +166,12 @@ void CubeTest::testRotateBack() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(back, Face::BACK);
-	assertArraySingleValue(front, Face::FRONT);
-	assertArrayEquals(left, Face::UP, Face::LEFT, Face::LEFT, Face::UP, Face::LEFT, Face::LEFT, Face::UP, Face::LEFT, Face::LEFT);
-	assertArrayEquals(right, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::RIGHT, Face::RIGHT, Face::DOWN);
-	assertArrayEquals(up, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP);
-	assertArrayEquals(down, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::LEFT, Face::LEFT, Face::LEFT);
+	assertArraySingleValue("Face BACK:", back, Face::BACK);
+	assertArraySingleValue("Face FRONT:", front, Face::FRONT);
+	assertArrayEquals("Face LEFT:", left, Face::UP, Face::LEFT, Face::LEFT, Face::UP, Face::LEFT, Face::LEFT, Face::UP, Face::LEFT, Face::LEFT);
+	assertArrayEquals("Face RIGHT:", right, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::RIGHT, Face::RIGHT, Face::DOWN, Face::RIGHT, Face::RIGHT, Face::DOWN);
+	assertArrayEquals("Face UP:", up, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP, Face::UP);
+	assertArrayEquals("Face DOWN:", down, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::DOWN, Face::LEFT, Face::LEFT, Face::LEFT);
 }
 
 void CubeTest::testRotateBackFromShuffled() {
@@ -188,12 +191,12 @@ void CubeTest::testRotateDown() {
 	int *front = cube.get(Face::FRONT);
 	int *back = cube.get(Face::BACK);
 
-	assertArraySingleValue(up, Face::UP);
-	assertArraySingleValue(down, Face::DOWN);
-	assertArrayEquals(left, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::BACK, Face::BACK, Face::BACK);
-	assertArrayEquals(right, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::FRONT, Face::FRONT, Face::FRONT);
-	assertArrayEquals(front, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::LEFT, Face::LEFT, Face::LEFT);
-	assertArrayEquals(back, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::RIGHT, Face::RIGHT, Face::RIGHT);
+	assertArraySingleValue("Face UP:", up, Face::UP);
+	assertArraySingleValue("Face DOWN:", down, Face::DOWN);
+	assertArrayEquals("Face LEFT:", left, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::LEFT, Face::BACK, Face::BACK, Face::BACK);
+	assertArrayEquals("Face RIGHT:", right, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::RIGHT, Face::FRONT, Face::FRONT, Face::FRONT);
+	assertArrayEquals("Face FRONT:", front, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::FRONT, Face::LEFT, Face::LEFT, Face::LEFT);
+	assertArrayEquals("Face BACK:", back, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::BACK, Face::RIGHT, Face::RIGHT, Face::RIGHT);
 }
 
 void CubeTest::testRotateDownFromShuffled() {
