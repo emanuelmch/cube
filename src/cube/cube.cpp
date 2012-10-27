@@ -89,24 +89,75 @@ static void rotateUpDown(bool clockwise, int *front, int *left, int *back, int *
 	}
 }
 
-static void rotateLeftRight(bool clockwise, int *front, int *left, int *back, int *right, int from, int to, int step) {
-	// TODO Está errado
+static void rotateLeft(bool clockwise, int *up, int *front, int *down, int *back) {
 	if (clockwise) {
-		for (int i = from; i <= to; i += step) {
-			int temp = front[i];
-			front[i] = right[i];
-			right[i] = back[i];
-			back[i] = left[i];
-			left[i] = temp;
-		}
+		int up0 = up[0];
+		int up3 = up[3];
+		int up6 = up[6];
+		up[0] = back[8];
+		up[3] = back[5];
+		up[6] = back[2];
+		back[8] = down[0];
+		back[5] = down[3];
+		back[2] = down[6];
+		down[0] = front[0];
+		down[3] = front[3];
+		down[6] = front[6];
+		front[0] = up0;
+		front[3] = up3;
+		front[6] = up6;
 	} else {
-		for (int i = from; i <= to; i += step) {
-			int temp = front[i];
-			front[i] = left[i];
-			left[i] = back[i];
-			back[i] = right[i];
-			right[i] = temp;
-		}
+		int up0 = up[0];
+		int up3 = up[3];
+		int up6 = up[6];
+		up[0] = front[0];
+		up[3] = front[3];
+		up[6] = front[6];
+		front[0] = down[0];
+		front[3] = down[3];
+		front[6] = down[6];
+		down[0] = back[8];
+		down[3] = back[5];
+		down[6] = back[2];
+		back[8] = up0;
+		back[5] = up3;
+		back[2] = up6;
+	}
+}
+
+static void rotateRight(bool clockwise, int *up, int *back, int *down, int *front) {
+	if (clockwise) {
+		int up2 = up[2];
+		int up5 = up[5];
+		int up8 = up[8];
+		up[2] = front[2];
+		up[5] = front[5];
+		up[8] = front[8];
+		front[2] = down[2];
+		front[5] = down[5];
+		front[8] = down[8];
+		down[2] = back[6];
+		down[5] = back[3];
+		down[8] = back[0];
+		back[6] = up2;
+		back[3] = up5;
+		back[0] = up8;
+	} else {
+		int up2 = up[2];
+		int up5 = up[5];
+		int up8 = up[8];
+		up[2] = back[6];
+		up[5] = back[3];
+		up[8] = back[0];
+		back[6] = down[2];
+		back[3] = down[5];
+		back[0] = down[8];
+		down[2] = front[2];
+		down[5] = front[5];
+		down[8] = front[8];
+		front[2] = up2;
+		front[5] = up5;
+		front[8] = up8;
 	}
 }
 
@@ -211,11 +262,11 @@ void Bill::Cube::Cube::rotate(Rotate *rotate) {
 
 	case LEFT:
 		rotateFace(rotate->clockwise, left);
-		rotateLeftRight(rotate->clockwise, up, front, down, back, 0, 6, 3);
+		rotateLeft(rotate->clockwise, up, front, down, back);
 		break;
 	case RIGHT:
 		rotateFace(rotate->clockwise, right);
-		rotateLeftRight(rotate->clockwise, up, back, down, front, 2, 8, 3);
+		rotateRight(rotate->clockwise, up, back, down, front);
 		break;
 
 	case FRONT:
