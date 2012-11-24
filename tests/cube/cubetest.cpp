@@ -329,6 +329,32 @@ void CubeTest::testRotateDown() {
 }
 
 void CubeTest::testRotateDownFromShuffled() {
-	// TODO
+	Cube cube;
+	cube.shuffle();
+
+	int oldUp[9], oldDown[9], oldLeft[9], oldRight[9], oldFront[9], oldBack[9];
+	memcpy(oldUp, cube.get(Face::UP), sizeof(int) * 9);
+	memcpy(oldDown, cube.get(Face::DOWN), sizeof(int) * 9);
+	memcpy(oldLeft, cube.get(Face::LEFT), sizeof(int) * 9);
+	memcpy(oldRight, cube.get(Face::RIGHT), sizeof(int) * 9);
+	memcpy(oldFront, cube.get(Face::FRONT), sizeof(int) * 9);
+	memcpy(oldBack, cube.get(Face::BACK), sizeof(int) * 9);
+
+	Rotate rotate(true, Face::DOWN);
+	cube.rotate(&rotate);
+
+	int *up = cube.get(Face::UP);
+	int *down = cube.get(Face::DOWN);
+	int *left = cube.get(Face::LEFT);
+	int *right = cube.get(Face::RIGHT);
+	int *front = cube.get(Face::FRONT);
+	int *back = cube.get(Face::BACK);
+
+	assertArrayEquals("Face DOWN:", down, oldDown[6], oldDown[3], oldDown[0], oldDown[7], oldDown[4], oldDown[1], oldDown[8], oldDown[5], oldDown[2]);
+	assertArrayEquals("Face UP:", up, oldUp[0], oldUp[1], oldUp[2], oldUp[3], oldUp[4], oldUp[5], oldUp[6], oldUp[7], oldUp[8]);
+	assertArrayEquals("Face LEFT:", left, oldLeft[0], oldLeft[1], oldLeft[2], oldLeft[3], oldLeft[4], oldLeft[5], oldBack[6], oldBack[7], oldBack[8]);
+	assertArrayEquals("Face RIGHT:", right, oldRight[0], oldRight[1], oldRight[2], oldRight[3], oldRight[4], oldRight[5], oldFront[6], oldFront[7], oldFront[8]);
+	assertArrayEquals("Face FRONT:", front, oldFront[0], oldFront[1], oldFront[2], oldFront[3], oldFront[4], oldFront[5], oldLeft[6], oldLeft[7], oldLeft[8]);
+	assertArrayEquals("Face BACK:", back, oldBack[0], oldBack[1], oldBack[2], oldBack[3], oldBack[4], oldBack[5], oldRight[6], oldRight[7], oldRight[8]);
 }
 
