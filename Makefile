@@ -1,9 +1,6 @@
 
 CXX := g++
 
-# Code dependencies are not necessary for these these targets
-NODEPS := clean
-
 SRC_DIR := ./src
 TSS_DIR := ./tests
 BUILD_DIR := ./build
@@ -15,7 +12,7 @@ TST_DIR := $(BUILD_DIR)/test
 
 FLAGS := -Wall -Wextra -pedantic -std=c++0x
 FLAGS_DEBUG := -march=corei7-avx -mtune=corei7-avx -O0 -g
-FLAGS_DEBUG := -march=corei7-avx -mtune=corei7-avx -O2
+FLAGS_RELEASE := -march=corei7-avx -mtune=corei7-avx -O2
 LIBS := -lallegro{,_{dialog,font,image}}
 TEST_LIBS := -lcppunit
 
@@ -103,9 +100,16 @@ $(TST_DIR)/%.o: $(TSS_DIR)/%.cpp
 clean:
 	rm -rf $(BUILD_DIR) release{,.exe} debug{,.exe} test{,.exe}
 
-.PHONY: all clean check run
+todo:
+	@grep -rI "TODO" src
+	@grep -rI "TODO" tests
 
-#ifneq "$(MAKECMDGOALS)" "clean"
+.PHONY: clean todo
+
+# Code dependencies are not necessary for these these targets
+NODEPS := clean todo
+
 ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
 -include $(DBG_DEPS)
+-include $(REL_DEPS)
 endif
