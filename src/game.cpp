@@ -114,9 +114,11 @@ void Bill::Game::game_loop() {
 }
 
 void Bill::Game::shutdown() {
-	if (display) {
-		al_destroy_display(display);
-		display = NULL;
+	al_unregister_event_source(event_queue, al_get_display_event_source(display));
+
+	if (font) {
+		al_destroy_font(font);
+		font = NULL;
 	}
 
 	if (event_queue) {
@@ -129,9 +131,14 @@ void Bill::Game::shutdown() {
 		timer = NULL;
 	}
 
-	if (font) {
-		al_destroy_font(font);
-		font = NULL;
+	if (display) {
+		al_destroy_display(display);
+		display = NULL;
 	}
+
+	al_shutdown_font_addon();
+	al_shutdown_image_addon();
+
+	//al_uninstall_system();
 }
 

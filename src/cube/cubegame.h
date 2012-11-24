@@ -24,7 +24,7 @@ namespace Cube {
 		Sprite *faces[6];
 		int menu = 0;
 
-		void process_menu();
+		void process_menu(bool clockwise);
 	};
 
 }

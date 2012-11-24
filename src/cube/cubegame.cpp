@@ -63,7 +63,12 @@ bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
 			}
 			break;
 		case ALLEGRO_KEY_ENTER:
-			process_menu();
+		case ALLEGRO_KEY_RIGHT:
+			process_menu(true);
+			redraw = true;
+			break;
+		case ALLEGRO_KEY_LEFT:
+			process_menu(false);
 			redraw = true;
 			break;
 		}
@@ -72,35 +77,35 @@ bool Bill::Cube::CubeGame::sub_loop_process(ALLEGRO_EVENT &ev) {
 	return redraw;
 }
 
-void Bill::Cube::CubeGame::process_menu() {
+void Bill::Cube::CubeGame::process_menu(bool clockwise) {
 	switch (menu) {
 	case 0: { // Up
-			Rotate rotate(true, Face::UP);
+			Rotate rotate(clockwise, Face::UP);
 			this->cube.rotate(&rotate);
 		}
 		break;
 	case 1: { // Left
-			Rotate rotate(true, Face::LEFT);
+			Rotate rotate(clockwise, Face::LEFT);
 			this->cube.rotate(&rotate);
 		}
 		break;
 	case 2: { // Front
-			Rotate rotate(true, Face::FRONT);
+			Rotate rotate(clockwise, Face::FRONT);
 			this->cube.rotate(&rotate);
 		}
 		break;
 	case 3: { // Right
-			Rotate rotate(true, Face::RIGHT);
+			Rotate rotate(clockwise, Face::RIGHT);
 			this->cube.rotate(&rotate);
 		}
 		break;
 	case 4: { // Back
-			Rotate rotate(true, Face::BACK);
+			Rotate rotate(clockwise, Face::BACK);
 			this->cube.rotate(&rotate);
 		}
 		break;
 	case 5: { // Down
-			Rotate rotate(true, Face::DOWN);
+			Rotate rotate(clockwise, Face::DOWN);
 			this->cube.rotate(&rotate);
 		}
 		break;
