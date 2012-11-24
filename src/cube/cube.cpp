@@ -205,47 +205,29 @@ static void rotateFront(bool clockwise, int *front, int *left, int *back, int *r
 	}
 }
 
-static void rotateBack(bool clockwise, int *front, int *left, int *back, int *right) {
-	if (!clockwise) {
-		int front0 = front[0];
-		int front1 = front[1];
-		int front2 = front[2];
+static void rotateBack(bool clockwise, int *up, int *left, int *down, int *right) {
+	if (clockwise) {
+		int up0 = up[0];
+		int up1 = up[1];
+		int up2 = up[2];
 
-		front[0] = left[0];
-		front[1] = left[3];
-		front[2] = left[6];
+		up[0] = right[2];
+		up[1] = right[5];
+		up[2] = right[8];
 
-		left[0] = back[8];
-		left[3] = back[7];
-		left[6] = back[6];
+		right[2] = down[8];
+		right[5] = down[7];
+		right[8] = down[6];
 
-		back[8] = right[8];
-		back[7] = right[5];
-		back[6] = right[2];
+		down[6] = left[0];
+		down[7] = left[3];
+		down[8] = left[6];
 
-		right[8] = front0;
-		right[5] = front1;
-		right[2] = front2;
+		left[0] = up2;
+		left[3] = up1;
+		left[6] = up0;
 	} else {
-		int front0 = front[0];
-		int front1 = front[1];
-		int front2 = front[2];
-		
-		front[0] = right[8];
-		front[1] = right[5];
-		front[2] = right[2];
-
-		right[8] = back[8];
-		right[5] = back[7];
-		right[2] = back[6];
-
-		back[8] = left[0];
-		back[7] = left[3];
-		back[6] = left[6];
-
-		left[0] = front0;
-		left[3] = front1;
-		left[6] = front2;
+		// TODO rotate counter clockwise
 	}
 }
 
