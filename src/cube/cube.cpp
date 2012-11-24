@@ -227,7 +227,9 @@ static void rotateBack(bool clockwise, int *up, int *left, int *down, int *right
 		left[3] = up1;
 		left[6] = up0;
 	} else {
-		// TODO rotate counter clockwise
+		rotateBack(true, up, left, down, right);
+		rotateBack(true, up, left, down, right);
+		rotateBack(true, up, left, down, right);
 	}
 }
 
