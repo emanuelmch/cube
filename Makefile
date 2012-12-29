@@ -13,7 +13,7 @@ TST_DIR := $(BUILD_DIR)/test
 FLAGS := -Wall -Wextra -pedantic -std=c++0x
 FLAGS_DEBUG := -march=corei7-avx -mtune=corei7-avx -O0 -g
 FLAGS_RELEASE := -march=corei7-avx -mtune=corei7-avx -O2
-LIBS := -lallegro{,_{dialog,font,image}}
+LIBS := -lallegro -lallegro_dialog -lallegro_font -lallegro_image
 TEST_LIBS := -lcppunit
 
 SRCS := $(shell find $(SRC_DIR) -type f -name \*.cpp)
